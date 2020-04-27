@@ -10,9 +10,12 @@ class ButtonsContainer extends React.Component {
   render() {
     return (
       <div className="horizontal-container">
-        <StartButton handler={this.props.start}></StartButton>
-        <SplitButton></SplitButton>
-        <ResetButton></ResetButton>
+        <StartButton
+          startHandler={this.props.start}
+          pauseHandler={this.props.pause}
+        ></StartButton>
+        <SplitButton splitHandler={this.props.split}></SplitButton>
+        <ResetButton handler={this.props.reset}></ResetButton>
       </div>
     );
   }

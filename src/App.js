@@ -16,11 +16,29 @@ class App extends React.Component {
       seconds: 0,
       minutes: 0,
       hours: 0,
+      disableResetBtn: true,
+      disableSplitBtn: true,
+      splitTimeText: "SPLIT TIME",
     };
     this.start = this.start.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
     this.timeIncrementor = this.timeIncrementor.bind(this);
+    this.updateSplitTimeText = this.updateSplitTimeText.bind(this);
+  }
+
+  updateSplitTimeText() {
+    this.setState((state, props) => ({
+      splitTimeText:
+        ("00" + this.state.hours).slice(-2) +
+        ":" +
+        ("00" + this.state.minutes).slice(-2) +
+        ":" +
+        ("00" + this.state.seconds).slice(-2) +
+        "." +
+        this.state.hundredthMillis +
+        ("00" + this.state.tenthMillis).slice(-2),
+    }));
   }
 
   timeIncrementor() {
@@ -83,7 +101,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Stopwatch time={this.state}></Stopwatch>
-        <SplitTime time={this.state}></SplitTime>
+        <SplitTime time={this.state.splitTimeText}></SplitTime>
         <button onClick={() => this.start()}>Start</button>
         <hr></hr>
         <button onClick={() => this.pause()}>Pause</button>
@@ -92,6 +110,7 @@ class App extends React.Component {
         <ButtonsContainer
           start={() => this.start()}
           pause={() => this.pause()}
+          split={() => this.updateSplitTimeText()}
           reset={() => this.reset()}
         ></ButtonsContainer>
         <LogTable time={this.state}></LogTable>
