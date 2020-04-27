@@ -6,7 +6,7 @@ import ResetButton from "./resetBtn";
 class ButtonsContainer extends React.Component {
   render() {
     return (
-      <div class="horizontal-container">
+      <div className="horizontal-container">
         <StartButton></StartButton>
         <SplitButton></SplitButton>
         <ResetButton></ResetButton>

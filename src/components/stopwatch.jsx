@@ -1,12 +1,18 @@
 import React, { Component } from "react";
 
 class Stopwatch extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  // }
+
   render() {
     return (
-      <div class="stopwatch">
-        <span id="hours">00</span>:<span id="minutes">00</span>:
-        <span id="seconds">00</span>.<span id="hundredthOfMillis">0</span>
-        <span id="tenthOfMillis">00</span>
+      <div className="stopwatch">
+        <span id="hours">{this.props.time.hours}</span>:
+        <span id="minutes">{this.props.time.minutes}</span>:
+        <span id="seconds">{this.props.time.seconds}</span>.
+        <span id="hundredthOfMillis">{this.props.time.hundredthMillis}</span>
+        <span id="tenthOfMillis">{this.props.time.tenthMillis}</span>
       </div>
     );
   }

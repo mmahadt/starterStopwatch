@@ -1,13 +1,27 @@
 import React, { Component } from "react";
 
 class ResetButton extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = { enabled: false };
+    this.toggleEnableDisable = this.toggleEnableDisable.bind(this);
+  }
+
+  toggleEnableDisable() {
+    this.setState((state) => {
+      if (state.enabled === true) {
+        return { enabled: false };
+      } else {
+        return { enables: true };
+      }
+    });
+  }
   render() {
     return (
       <button
         id="button-reset"
-        class="rounded-btn reset"
-        onclick="reset()"
+        className="rounded-btn reset"
+        // onClick={}
         disabled
       >
         Reset
