@@ -20,28 +20,21 @@ class App extends React.Component {
     this.start = this.start.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
-    this.tenthMillisIncrementor = this.tenthMillisIncrementor.bind(this);
     this.timeIncrementor = this.timeIncrementor.bind(this);
-    this.numberFormtter = this.numberFormtter.bind(this);
-  }
-
-  numberFormtter(num) {
-    return ("00" + num).slice(-2);
   }
 
   timeIncrementor() {
-    if (this.state.tenthMillis < 99) {
+    if (this.state.tenthMillis <= 99) {
       this.setState((state, props) => ({
         tenthMillis: this.state.tenthMillis + 1,
       }));
-    }
-    if (this.state.tenthMillis == 99) {
+    } else if (this.state.tenthMillis == 100) {
       this.setState((state, props) => ({
         tenthMillis: 0,
         hundredthMillis: this.state.hundredthMillis + 1,
       }));
     }
-    if (this.state.hundredthMillis == 9) {
+    if (this.state.hundredthMillis == 10) {
       this.setState((state, props) => ({
         hundredthMillis: 0,
         seconds: this.state.seconds + 1,
@@ -62,19 +55,6 @@ class App extends React.Component {
     if (this.state.minutes == 23) {
       this.setState((state, props) => ({
         hours: 0,
-      }));
-    }
-  }
-
-  tenthMillisIncrementor() {
-    if (this.state.tenthMillis < 99) {
-      this.setState((state, props) => ({
-        tenthMillis: this.state.tenthMillis + 1,
-      }));
-    } else {
-      this.setState((state, props) => ({
-        tenthMillis: 0,
-        hundredthMillis: this.state.hundredthMillis + 1,
       }));
     }
   }

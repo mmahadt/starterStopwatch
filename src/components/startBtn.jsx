@@ -6,7 +6,7 @@ class StartButton extends React.Component {
       <button
         id="button-start"
         className="rounded-btn start"
-        // onClick="start()"
+        onClick={() => this.start}
       >
         Start
       </button>

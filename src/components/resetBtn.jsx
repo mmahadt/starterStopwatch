@@ -21,7 +21,7 @@ class ResetButton extends React.Component {
       <button
         id="button-reset"
         className="rounded-btn reset"
-        // onClick={}
+        onClick={() => this.reset}
         disabled
       >
         Reset
