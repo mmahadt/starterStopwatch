@@ -89,7 +89,11 @@ class App extends React.Component {
         <button onClick={() => this.pause()}>Pause</button>
         <hr></hr>
         <button onClick={() => this.reset()}>Reset</button>
-        <ButtonsContainer></ButtonsContainer>
+        <ButtonsContainer
+          start={() => this.start()}
+          pause={() => this.pause()}
+          reset={() => this.reset()}
+        ></ButtonsContainer>
         <LogTable time={this.state}></LogTable>
       </div>
     );
