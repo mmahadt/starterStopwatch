@@ -31,7 +31,7 @@ class App extends React.Component {
     this.disableReset = this.disableReset.bind(this);
     this.enableSplit = this.enableSplit.bind(this);
     this.disableSplit = this.disableSplit.bind(this);
-    this.timeIncrementor = this.timeIncrementor.bind(this);
+    // this.timeIncrementor = this.timeIncrementor.bind(this);
     this.updateSplitTimeText = this.updateSplitTimeText.bind(this);
     this.ticks = this.ticks.bind(this);
   }
@@ -90,42 +90,6 @@ class App extends React.Component {
     }));
   }
 
-  timeIncrementor() {
-    if (this.state.tenthMillis <= 99) {
-      this.setState((state, props) => ({
-        tenthMillis: this.state.tenthMillis + 1,
-      }));
-    } else if (this.state.tenthMillis == 100) {
-      this.setState((state, props) => ({
-        tenthMillis: 0,
-        hundredthMillis: this.state.hundredthMillis + 1,
-      }));
-    }
-    if (this.state.hundredthMillis == 10) {
-      this.setState((state, props) => ({
-        hundredthMillis: 0,
-        seconds: this.state.seconds + 1,
-      }));
-    }
-    if (this.state.seconds === 60) {
-      this.setState((state, props) => ({
-        seconds: 0,
-        minutes: this.state.minutes + 1,
-      }));
-    }
-    if (this.state.minutes === 60) {
-      this.setState((state, props) => ({
-        minutes: 0,
-        hours: this.state.hours + 1,
-      }));
-    }
-    if (this.state.minutes === 23) {
-      this.setState((state, props) => ({
-        hours: 0,
-      }));
-    }
-  }
-
   start() {
     clearInterval(this.state.interval);
     const s = setInterval(this.ticks, 1);
@@ -171,16 +135,12 @@ class App extends React.Component {
         </div>
 
         <SplitTime time={this.state.splitTimeText}></SplitTime>
-        <button onClick={() => this.start()}>Start</button>
-        <hr></hr>
-        <button onClick={() => this.pause()}>Pause</button>
-        <hr></hr>
-        <button onClick={() => this.reset()}>Reset</button>
+
         <ButtonsContainer
           start={this.start}
-          pause={() => this.pause()}
-          split={() => this.updateSplitTimeText()}
-          reset={() => this.reset()}
+          pause={this.pause}
+          split={this.updateSplitTimeText}
+          reset={this.reset}
           disableResetBtn={this.state.disableResetBtn}
           disableSplitBtn={this.state.disableSplitBtn}
           enableReset={() => this.enableReset()}
