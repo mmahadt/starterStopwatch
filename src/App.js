@@ -52,11 +52,25 @@ class App extends React.Component {
   }
 
   start() {
-    clearInterval(this.state.interval);
-    const s = setInterval(this.ticks, 1);
-    this.setState((state, props) => ({
-      interval: s,
-    }));
+    if (!this.start.didrun) {
+      //For first run of start function after page load
+      //we have to set t0 to performance.now()
+      clearInterval(this.state.interval);
+      const s = setInterval(this.ticks, 1);
+      this.setState((state, props) => ({
+        interval: s,
+        t0: performance.now(),
+      }));
+      this.start.didrun = true;
+    } else {
+      //it is called to resume after pause
+      //so time t0 will not be set to performance.now()
+      clearInterval(this.state.interval);
+      const s = setInterval(this.ticks, 1);
+      this.setState((state, props) => ({
+        interval: s,
+      }));
+    }
   }
 
   pause() {
