@@ -20,6 +20,8 @@ class StartButton extends React.Component {
         status: "Pause",
       }));
       this.props.startHandler();
+      this.props.disableReset();
+      this.props.enableSplit();
     } else {
       this.setState((state, props) => ({
         class: "rounded-btn start",
@@ -27,6 +29,8 @@ class StartButton extends React.Component {
         status: "Start",
       }));
       this.props.pauseHandler();
+      this.props.enableReset();
+      this.props.disableSplit();
     }
   }
 

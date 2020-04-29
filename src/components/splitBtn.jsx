@@ -11,7 +11,7 @@ class SplitButton extends React.Component {
         id="button-split"
         className="rounded-btn split"
         onClick={() => this.props.splitHandler()}
-        // disabled
+        disabled={this.props.splitDisabled}
       >
         Split
       </button>

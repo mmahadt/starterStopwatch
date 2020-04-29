@@ -3,16 +3,17 @@ import React, { Component } from "react";
 class ResetButton extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { disabled: false };
+    this.state = { disable: this.props.resetDisabled };
     this.toggleEnableDisable = this.toggleEnableDisable.bind(this);
   }
 
   toggleEnableDisable() {
+    this.props.handler();
     this.setState((state, props) => {
-      if (state.disabled) {
-        return { disabled: false };
+      if (state.disable === false) {
+        return { disable: true };
       } else {
-        return { disabled: true };
+        return { disable: false };
       }
     });
   }
@@ -26,7 +27,9 @@ class ResetButton extends React.Component {
         // }`}
         className="rounded-btn reset"
         onClick={() => this.props.handler()}
-        disabled={this.state.disabled}
+        // onClick={() => this.toggleEnableDisable()}
+        disabled={this.props.resetDisabled}
+        // disabled={this.state.disable}
       >
         Reset
       </button>
