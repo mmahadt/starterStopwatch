@@ -1,22 +1,16 @@
 import React, { Component } from "react";
 
-class SplitButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <button
-        id="button-split"
-        className="rounded-btn split"
-        onClick={() => this.props.splitHandler()}
-        disabled={this.props.splitDisabled}
-      >
-        Split
-      </button>
-    );
-  }
+function SplitButton(props) {
+  return (
+    <button
+      id="button-split"
+      className="rounded-btn split"
+      onClick={() => props.splitHandler()}
+      disabled={props.splitDisabled}
+    >
+      Split
+    </button>
+  );
 }
 
 export default SplitButton;

@@ -22,14 +22,9 @@ class ResetButton extends React.Component {
     return (
       <button
         id="button-reset"
-        // className={`rounded-btn ${
-        //   this.state.enabled ? "reset" : "button:disabled"
-        // }`}
         className="rounded-btn reset"
         onClick={() => this.props.handler()}
-        // onClick={() => this.toggleEnableDisable()}
         disabled={this.props.resetDisabled}
-        // disabled={this.state.disable}
       >
         Reset
       </button>
