@@ -12,14 +12,14 @@ class App extends React.Component {
     this.state = {
       interval: 0,
       t0: 0,
-      unitMillis: 0,
-      tenthMillis: 0,
-      hundredthMillis: 0,
-      // unitSeconds: 0,
-      // tenSeconds: 0,
-      seconds: 0,
-      minutes: 0,
-      hours: 0,
+      time: {
+        unitMillis: 0,
+        tenthMillis: 0,
+        hundredthMillis: 0,
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+      },
       disableResetBtn: true,
       disableSplitBtn: true,
       splitTimeText: "SPLIT TIME",
@@ -40,17 +40,14 @@ class App extends React.Component {
     this.setState((state, props) => {
       const milliseconds = performance.now() - state.t0;
       return {
-        unitMillis: Math.floor(milliseconds % 10),
-        tenthMillis: Math.floor((milliseconds / 10) % 10),
-        hundredthMillis: Math.floor((milliseconds / 100) % 10),
-        // unitSeconds: Math.floor((milliseconds / 1000) % 10),
-        // tenSeconds: Math.floor((milliseconds / 10000) % 10),
-        seconds: Math.floor((milliseconds / 1000) % 60),
-        minutes: Math.floor((milliseconds / (1000 * 60)) % 60),
-        hours: Math.floor((milliseconds / (1000 * 60 * 60)) % 24),
-        // seconds: (state.milliseconds / 1000) % 60,
-        // minutes: (state.milliseconds / (1000 * 60)) % 60,
-        // hours: (state.milliseconds / (1000 * 60 * 60)) % 24,
+        time: {
+          unitMillis: Math.floor(milliseconds % 10),
+          tenthMillis: Math.floor((milliseconds / 10) % 10),
+          hundredthMillis: Math.floor((milliseconds / 100) % 10),
+          seconds: Math.floor((milliseconds / 1000) % 60),
+          minutes: Math.floor((milliseconds / (1000 * 60)) % 60),
+          hours: Math.floor((milliseconds / (1000 * 60 * 60)) % 24),
+        },
       };
     });
   }
@@ -81,14 +78,15 @@ class App extends React.Component {
   updateSplitTimeText() {
     this.setState((state, props) => ({
       splitTimeText:
-        ("00" + this.state.hours).slice(-2) +
+        ("00" + this.state.time.hours).slice(-2) +
         ":" +
-        ("00" + this.state.minutes).slice(-2) +
+        ("00" + this.state.time.minutes).slice(-2) +
         ":" +
-        ("00" + this.state.seconds).slice(-2) +
+        ("00" + this.state.time.seconds).slice(-2) +
         "." +
-        this.state.hundredthMillis +
-        ("00" + this.state.tenthMillis).slice(-2),
+        this.state.time.hundredthMillis +
+        ("" + this.state.time.tenthMillis) +
+        ("" + this.state.time.unitMillis),
     }));
   }
 
@@ -145,14 +143,14 @@ class App extends React.Component {
   reset() {
     this.setState((state, props) => ({
       t0: 0,
-      unitMillis: 0,
-      tenthMillis: 0,
-      hundredthMillis: 0,
-      // unitSeconds: 0,
-      // tenSeconds: 0,
-      seconds: 0,
-      minutes: 0,
-      hours: 0,
+      time: {
+        unitMillis: 0,
+        tenthMillis: 0,
+        hundredthMillis: 0,
+        seconds: 0,
+        minutes: 0,
+        hours: 0,
+      },
       disableResetBtn: true,
     }));
   }
@@ -164,22 +162,21 @@ class App extends React.Component {
         {/* <Stopwatch time={this.state}></Stopwatch> */}
 
         <div className="stopwatch">
-          <span id="hours">{("00" + this.state.hours).slice(-2)}</span>:
-          <span id="minutes">{("00" + this.state.minutes).slice(-2)}</span>:
-          {/* <span id="tenSeconds">{this.state.tenSeconds}</span> */}
-          <span id="unitSeconds">{this.state.seconds}</span>.
-          <span id="hundredthOfMillis">{this.state.hundredthMillis}</span>
-          <span id="tenthOfMillis">{this.state.tenthMillis}</span>
-          <span id="unitMillis">{this.state.unitMillis}</span>
+          <span id="hours">{("00" + this.state.time.hours).slice(-2)}</span>:
+          <span id="minutes">{("00" + this.state.time.minutes).slice(-2)}</span>
+          :<span id="seconds">{this.state.time.seconds}</span>.
+          <span id="hundredthOfMillis">{this.state.time.hundredthMillis}</span>
+          <span id="tenthOfMillis">{this.state.time.tenthMillis}</span>
+          <span id="unitMillis">{this.state.time.unitMillis}</span>
         </div>
 
-        {/* <SplitTime time={this.state.splitTimeText}></SplitTime> */}
+        <SplitTime time={this.state.splitTimeText}></SplitTime>
         <button onClick={() => this.start()}>Start</button>
         <hr></hr>
         <button onClick={() => this.pause()}>Pause</button>
         <hr></hr>
         <button onClick={() => this.reset()}>Reset</button>
-        {/* <ButtonsContainer
+        <ButtonsContainer
           start={this.start}
           pause={() => this.pause()}
           split={() => this.updateSplitTimeText()}
@@ -191,7 +188,7 @@ class App extends React.Component {
           enableSplit={() => this.enableSplit()}
           disableSplit={() => this.disableSplit()}
         ></ButtonsContainer>
-        <LogTable time={this.state}></LogTable> */}
+        <LogTable time={this.state}></LogTable>
       </div>
     );
   }
