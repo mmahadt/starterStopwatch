@@ -1,18 +1,10 @@
 import React, { Component } from "react";
 
 function LogTable(props) {
-  const time = props.timeCalculator;
-
-  const markup = props.list.map((item, index) => {
-    const {
-      unitMillis,
-      tenthMillis,
-      hundredthMillis,
-      seconds,
-      minutes,
-      hours,
-    } = time(item.millis);
-
+  const { timeCalculator, timeFormatter, list } = props;
+  const time = timeCalculator;
+  const formatTime = timeFormatter;
+  const markup = list.map((item, index) => {
     return (
       <React.Fragment>
         <div className="gray">{`#${index + 1}`}</div>
@@ -21,15 +13,7 @@ function LogTable(props) {
             item.action === "Pause" ? "pauseLogEntry" : "splitLogEntry"
           }
         >
-          {("00" + hours).slice(-2) +
-            ":" +
-            ("00" + minutes).slice(-2) +
-            ":" +
-            ("00" + seconds).slice(-2) +
-            "." +
-            hundredthMillis +
-            ("" + tenthMillis) +
-            ("" + unitMillis)}
+          {formatTime(time(item.millis))}
         </div>
         <div className="lightGray">{item.action}</div>
       </React.Fragment>

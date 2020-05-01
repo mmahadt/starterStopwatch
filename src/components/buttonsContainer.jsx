@@ -2,27 +2,33 @@ import React, { Component } from "react";
 import Button from "./Button";
 
 function ButtonsContainer(props) {
+  const {
+    disableSplitBtn,
+    start,
+    pause,
+    split,
+    reset,
+    disableResetBtn,
+  } = props;
   return (
     <div className="horizontal-container">
       <Button
-        handler={props.disableSplitBtn ? props.start : props.pause}
-        className={
-          props.disableSplitBtn ? "rounded-btn start" : "rounded-btn pause"
-        }
-        buttonName={props.disableSplitBtn ? "Start" : "Pause"}
+        handler={disableSplitBtn ? start : pause}
+        className={disableSplitBtn ? "rounded-btn start" : "rounded-btn pause"}
+        buttonName={disableSplitBtn ? "Start" : "Pause"}
         disabled={false}
       ></Button>
       <Button
-        handler={props.split}
+        handler={split}
         className="rounded-btn split"
         buttonName="Split"
-        disabled={props.disableSplitBtn}
+        disabled={disableSplitBtn}
       ></Button>
       <Button
-        handler={props.reset}
+        handler={reset}
         className="rounded-btn reset"
         buttonName="Reset"
-        disabled={props.disableResetBtn}
+        disabled={disableResetBtn}
       ></Button>
     </div>
   );

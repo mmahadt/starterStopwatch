@@ -22,6 +22,7 @@ class App extends React.Component {
     this.split = this.split.bind(this);
     this.ticks = this.ticks.bind(this);
     this.time = this.time.bind(this);
+    this.formattedTime = this.formattedTime.bind(this);
   }
 
   //time function accepts milliseconds and
@@ -70,14 +71,6 @@ class App extends React.Component {
 
   pause() {
     clearInterval(this.state.interval);
-    const {
-      unitMillis,
-      tenthMillis,
-      hundredthMillis,
-      seconds,
-      minutes,
-      hours,
-    } = this.time(this.state.milliseconds);
 
     this.setState((state, props) => {
       // Create a new array based on current state:
@@ -103,7 +96,7 @@ class App extends React.Component {
     }));
   }
 
-  split() {
+  formattedTime = (timeObject) => {
     const {
       unitMillis,
       tenthMillis,
@@ -111,7 +104,16 @@ class App extends React.Component {
       seconds,
       minutes,
       hours,
-    } = this.time(this.state.milliseconds);
+    } = timeObject;
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMins = minutes < 10 ? `0${minutes}` : minutes;
+    const formattedSecs = seconds < 10 ? `0${seconds}` : seconds;
+
+    return `${formattedHours}:${formattedMins}:${formattedSecs}.${hundredthMillis}${tenthMillis}${unitMillis}`;
+  };
+
+  split() {
+    const timeNow = this.time(this.state.milliseconds);
 
     this.setState((state, props) => {
       // Create a new array based on current state:
@@ -119,47 +121,46 @@ class App extends React.Component {
 
       // Add item to it
       splitTimeList.push({ millis: this.state.milliseconds, action: "Split" });
-
       return {
-        splitTimeText:
-          ("00" + hours).slice(-2) +
-          ":" +
-          ("00" + minutes).slice(-2) +
-          ":" +
-          ("00" + seconds).slice(-2) +
-          "." +
-          hundredthMillis +
-          ("" + tenthMillis) +
-          ("" + unitMillis),
+        splitTimeText: this.formattedTime(timeNow),
         splitTimeList,
       };
     });
   }
 
   render() {
+    const {
+      milliseconds,
+      splitTimeList,
+      splitTimeText,
+      disableSplitBtn,
+      disableResetBtn,
+    } = this.state;
+
     return (
       <div className="App">
         <Stopwatch
           timeCalculator={this.time}
-          milliseconds={this.state.milliseconds}
+          milliseconds={milliseconds}
         ></Stopwatch>
 
-        <p id="split-time">{this.state.splitTimeText}</p>
+        <p id="split-time">{splitTimeText}</p>
 
         <ButtonsContainer
           start={this.start}
           pause={this.pause}
           split={this.split}
           reset={this.reset}
-          disableResetBtn={this.state.disableResetBtn}
-          disableSplitBtn={this.state.disableSplitBtn}
+          disableResetBtn={disableResetBtn}
+          disableSplitBtn={disableSplitBtn}
         ></ButtonsContainer>
 
         <hr />
 
         <LogTable
           timeCalculator={this.time}
-          list={this.state.splitTimeList}
+          timeFormatter={this.formattedTime}
+          list={splitTimeList}
         ></LogTable>
       </div>
     );

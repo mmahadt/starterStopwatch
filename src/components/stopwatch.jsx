@@ -14,9 +14,9 @@ function Stopwatch(props) {
 
   return (
     <div className="stopwatch">
-      <span id="hours">{("00" + hours).slice(-2)}</span>:
-      <span id="minutes">{("00" + minutes).slice(-2)}</span>:
-      <span id="seconds">{("00" + seconds).slice(-2)}</span>.
+      <span id="hours">{hours < 10 ? `0${hours}` : hours}</span>:
+      <span id="minutes">{minutes < 10 ? `0${minutes}` : minutes}</span>:
+      <span id="seconds">{seconds < 10 ? `0${seconds}` : seconds}</span>.
       <span id="hundredthOfMillis">{hundredthMillis}</span>
       <span id="tenthOfMillis">{tenthMillis}</span>
       <span id="unitMillis">{unitMillis}</span>
