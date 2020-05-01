@@ -3,7 +3,7 @@ button {
   color: inherit;
   border: none;
   padding: 0;
-  font: "Arial";
+  font-family: "Arial";
   cursor: pointer;
   outline: inherit;
 }
@@ -15,7 +15,7 @@ body {
 
 .stopwatch {
   font-size: 8em;
-  font: "Arial";
+  font-family: "Arial";
   width: 100vw;
   text-align: justify;
 }
