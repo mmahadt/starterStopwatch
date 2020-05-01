@@ -88,3 +88,19 @@ button[disabled] {
   grid-column-gap: 1em;
   font-size: 1.5em;
 }
+
+.gray {
+  color: gray;
+}
+
+.lightGray {
+  color: rgb(173, 173, 173);
+}
+
+.splitLogEntry {
+  color: rgb(242, 158, 38);
+}
+
+.pauseLogEntry {
+  color: rgb(251, 101, 127);
+}
