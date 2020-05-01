@@ -16,15 +16,11 @@ class StartButton extends React.Component {
         status: "Pause",
       }));
       this.props.startHandler();
-      this.props.disableReset();
-      this.props.enableSplit();
     } else {
       this.setState((state, props) => ({
         status: "Start",
       }));
       this.props.pauseHandler();
-      this.props.enableReset();
-      this.props.disableSplit();
     }
   }
 

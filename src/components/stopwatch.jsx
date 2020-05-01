@@ -1,14 +1,7 @@
 import React, { Component } from "react";
 
 function Stopwatch(props) {
-  const time = (milliseconds) => ({
-    unitMillis: Math.floor(milliseconds % 10),
-    tenthMillis: Math.floor((milliseconds / 10) % 10),
-    hundredthMillis: Math.floor((milliseconds / 100) % 10),
-    seconds: Math.floor((milliseconds / 1000) % 60),
-    minutes: Math.floor((milliseconds / (1000 * 60)) % 60),
-    hours: Math.floor((milliseconds / (1000 * 60 * 60)) % 24),
-  });
+  const time = props.timeCalculator;
 
   const {
     unitMillis,

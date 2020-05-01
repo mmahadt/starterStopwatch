@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import Stopwatch from "./components/Stopwatch";
-import SplitTime from "./components/SplitTime";
 import ButtonsContainer from "./components/ButtonsContainer";
 import LogTable from "./components/LogTable";
 
@@ -20,15 +19,14 @@ class App extends React.Component {
     this.start = this.start.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
-    this.enableReset = this.enableReset.bind(this);
-    this.disableReset = this.disableReset.bind(this);
-    this.enableSplit = this.enableSplit.bind(this);
-    this.disableSplit = this.disableSplit.bind(this);
-    this.updateSplitTimeText = this.updateSplitTimeText.bind(this);
+    this.split = this.split.bind(this);
     this.ticks = this.ticks.bind(this);
     this.time = this.time.bind(this);
   }
 
+  //time function accepts milliseconds and
+  //returns an object containing time values
+  //for hours, mins, secs etc.
   time = (milliseconds) => ({
     unitMillis: Math.floor(milliseconds % 10),
     tenthMillis: Math.floor((milliseconds / 10) % 10),
@@ -53,6 +51,8 @@ class App extends React.Component {
       this.setState((state, props) => ({
         interval: s,
         t0: performance.now(),
+        disableResetBtn: true,
+        disableSplitBtn: false,
       }));
       this.start.didrun = true;
     } else {
@@ -62,6 +62,8 @@ class App extends React.Component {
       const s = setInterval(this.ticks, 1);
       this.setState((state, props) => ({
         interval: s,
+        disableResetBtn: true,
+        disableSplitBtn: false,
       }));
     }
   }
@@ -78,32 +80,18 @@ class App extends React.Component {
     } = this.time(this.state.milliseconds);
 
     this.setState((state, props) => {
-      const str = (
-        <React.Fragment>
-          <div style={{ color: "gray" }}>
-            {`#${this.state.splitTimeList.length + 1}`}
-          </div>
-          <div style={{ color: `rgb(251, 101, 127)` }}>
-            {("00" + hours).slice(-2) +
-              ":" +
-              ("00" + minutes).slice(-2) +
-              ":" +
-              ("00" + seconds).slice(-2) +
-              "." +
-              hundredthMillis +
-              ("" + tenthMillis) +
-              ("" + unitMillis)}
-          </div>
-          <div style={{ color: `rgb(173, 173, 173)` }}>{"Pause"}</div>
-        </React.Fragment>
-      );
       // Create a new array based on current state:
       let splitTimeList = [...this.state.splitTimeList];
 
       // Add item to it
-      splitTimeList.push(str);
+      splitTimeList.push({ millis: this.state.milliseconds, action: "Pause" });
 
-      return { interval: 0, splitTimeList };
+      return {
+        interval: 0,
+        disableResetBtn: false,
+        disableSplitBtn: true,
+        splitTimeList,
+      };
     });
   }
 
@@ -115,30 +103,7 @@ class App extends React.Component {
     }));
   }
 
-  enableReset() {
-    this.setState((state, props) => ({
-      disableResetBtn: false,
-    }));
-  }
-
-  disableReset() {
-    this.setState((state, props) => ({
-      disableResetBtn: true,
-    }));
-  }
-
-  enableSplit() {
-    this.setState((state, props) => ({
-      disableSplitBtn: false,
-    }));
-  }
-  disableSplit() {
-    this.setState((state, props) => ({
-      disableSplitBtn: true,
-    }));
-  }
-
-  updateSplitTimeText() {
+  split() {
     const {
       unitMillis,
       tenthMillis,
@@ -148,32 +113,12 @@ class App extends React.Component {
       hours,
     } = this.time(this.state.milliseconds);
 
-    const str = (
-      <React.Fragment>
-        <div style={{ color: "gray" }}>
-          {`#${this.state.splitTimeList.length + 1}`}
-        </div>
-        <div style={{ color: `rgb(242, 158, 38)` }}>
-          {("00" + hours).slice(-2) +
-            ":" +
-            ("00" + minutes).slice(-2) +
-            ":" +
-            ("00" + seconds).slice(-2) +
-            "." +
-            hundredthMillis +
-            ("" + tenthMillis) +
-            ("" + unitMillis)}
-        </div>
-        <div style={{ color: `rgb(173, 173, 173)` }}>{"Split"}</div>
-      </React.Fragment>
-    );
-
     this.setState((state, props) => {
       // Create a new array based on current state:
       let splitTimeList = [...this.state.splitTimeList];
 
       // Add item to it
-      splitTimeList.push(str);
+      splitTimeList.push({ millis: this.state.milliseconds, action: "Split" });
 
       return {
         splitTimeText:
@@ -194,26 +139,28 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Stopwatch milliseconds={this.state.milliseconds}></Stopwatch>
+        <Stopwatch
+          timeCalculator={this.time}
+          milliseconds={this.state.milliseconds}
+        ></Stopwatch>
 
-        <SplitTime time={this.state.splitTimeText}></SplitTime>
+        <p id="split-time">{this.state.splitTimeText}</p>
 
         <ButtonsContainer
           start={this.start}
           pause={this.pause}
-          split={this.updateSplitTimeText}
+          split={this.split}
           reset={this.reset}
           disableResetBtn={this.state.disableResetBtn}
           disableSplitBtn={this.state.disableSplitBtn}
-          enableReset={this.enableReset}
-          disableReset={this.disableReset}
-          enableSplit={this.enableSplit}
-          disableSplit={this.disableSplit}
         ></ButtonsContainer>
 
         <hr />
 
-        <LogTable list={this.state.splitTimeList}></LogTable>
+        <LogTable
+          timeCalculator={this.time}
+          list={this.state.splitTimeList}
+        ></LogTable>
       </div>
     );
   }
