@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 
 function Button(props) {
-  const { className, handler, disabled, buttonName } = props;
+  const { className, disabled, buttonName } = props;
   return (
-    <button className={className} onClick={() => handler()} disabled={disabled}>
+    <button
+      className={className}
+      onClick={() => props.handler()}
+      disabled={disabled}
+    >
       {buttonName}
     </button>
   );

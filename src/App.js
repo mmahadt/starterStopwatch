@@ -89,6 +89,7 @@ class App extends React.Component {
   }
 
   reset() {
+    this.start.didrun = false;
     this.setState((state, props) => ({
       t0: performance.now(),
       milliseconds: 0,
