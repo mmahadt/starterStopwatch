@@ -11,14 +11,7 @@ class App extends React.Component {
     this.state = {
       interval: 0,
       t0: 0,
-      time: {
-        unitMillis: 0,
-        tenthMillis: 0,
-        hundredthMillis: 0,
-        seconds: 0,
-        minutes: 0,
-        hours: 0,
-      },
+      milliseconds: 0,
       disableResetBtn: true,
       disableSplitBtn: true,
       splitTimeText: "SPLIT TIME",
@@ -33,22 +26,22 @@ class App extends React.Component {
     this.disableSplit = this.disableSplit.bind(this);
     this.updateSplitTimeText = this.updateSplitTimeText.bind(this);
     this.ticks = this.ticks.bind(this);
+    this.time = this.time.bind(this);
   }
 
+  time = (milliseconds) => ({
+    unitMillis: Math.floor(milliseconds % 10),
+    tenthMillis: Math.floor((milliseconds / 10) % 10),
+    hundredthMillis: Math.floor((milliseconds / 100) % 10),
+    seconds: Math.floor((milliseconds / 1000) % 60),
+    minutes: Math.floor((milliseconds / (1000 * 60)) % 60),
+    hours: Math.floor((milliseconds / (1000 * 60 * 60)) % 24),
+  });
+
   ticks() {
-    this.setState((state, props) => {
-      const milliseconds = performance.now() - state.t0;
-      return {
-        time: {
-          unitMillis: Math.floor(milliseconds % 10),
-          tenthMillis: Math.floor((milliseconds / 10) % 10),
-          hundredthMillis: Math.floor((milliseconds / 100) % 10),
-          seconds: Math.floor((milliseconds / 1000) % 60),
-          minutes: Math.floor((milliseconds / (1000 * 60)) % 60),
-          hours: Math.floor((milliseconds / (1000 * 60 * 60)) % 24),
-        },
-      };
-    });
+    this.setState((state, props) => ({
+      milliseconds: performance.now() - state.t0,
+    }));
   }
 
   start() {
@@ -82,7 +75,8 @@ class App extends React.Component {
       seconds,
       minutes,
       hours,
-    } = this.state.time;
+    } = this.time(this.state.milliseconds);
+
     this.setState((state, props) => {
       const str = (
         <React.Fragment>
@@ -116,14 +110,7 @@ class App extends React.Component {
   reset() {
     this.setState((state, props) => ({
       t0: performance.now(),
-      time: {
-        unitMillis: 0,
-        tenthMillis: 0,
-        hundredthMillis: 0,
-        seconds: 0,
-        minutes: 0,
-        hours: 0,
-      },
+      milliseconds: 0,
       disableResetBtn: true,
     }));
   }
@@ -152,21 +139,30 @@ class App extends React.Component {
   }
 
   updateSplitTimeText() {
+    const {
+      unitMillis,
+      tenthMillis,
+      hundredthMillis,
+      seconds,
+      minutes,
+      hours,
+    } = this.time(this.state.milliseconds);
+
     const str = (
       <React.Fragment>
         <div style={{ color: "gray" }}>
           {`#${this.state.splitTimeList.length + 1}`}
         </div>
         <div style={{ color: `rgb(242, 158, 38)` }}>
-          {("00" + this.state.time.hours).slice(-2) +
+          {("00" + hours).slice(-2) +
             ":" +
-            ("00" + this.state.time.minutes).slice(-2) +
+            ("00" + minutes).slice(-2) +
             ":" +
-            ("00" + this.state.time.seconds).slice(-2) +
+            ("00" + seconds).slice(-2) +
             "." +
-            this.state.time.hundredthMillis +
-            ("" + this.state.time.tenthMillis) +
-            ("" + this.state.time.unitMillis)}
+            hundredthMillis +
+            ("" + tenthMillis) +
+            ("" + unitMillis)}
         </div>
         <div style={{ color: `rgb(173, 173, 173)` }}>{"Split"}</div>
       </React.Fragment>
@@ -178,14 +174,7 @@ class App extends React.Component {
 
       // Add item to it
       splitTimeList.push(str);
-      const {
-        unitMillis,
-        tenthMillis,
-        hundredthMillis,
-        seconds,
-        minutes,
-        hours,
-      } = this.state.time;
+
       return {
         splitTimeText:
           ("00" + hours).slice(-2) +
@@ -205,7 +194,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <Stopwatch time={this.state.time}></Stopwatch>
+        <Stopwatch milliseconds={this.state.milliseconds}></Stopwatch>
 
         <SplitTime time={this.state.splitTimeText}></SplitTime>
 
